@@ -1,0 +1,8 @@
+- name: SETUP DESKTOP ENVIROMENT
+  hosts: all
+  roles:
+    - role: ssh
+      tags: ssh
+    - role: neovim
+      tags: nvim
+

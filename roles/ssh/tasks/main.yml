@@ -1,0 +1,29 @@
+- name: "check secret_path is defined"
+  fail: msg="The variable 'secrets_path' is empty"
+  when: secrets_path is undefined
+
+- name: "copy .ssh"
+  ansible.builtin.copy:
+    src: "{{ secrets_path }}/.ssh"
+    dest: "${HOME}"
+    mode: 700
+
+- name: Chmod id_rsa
+  ansible.builtin.file:
+    path: "${HOME}/.ssh/id_rsa"
+    mode: 0600
+
+- name: chmod id_rsa.pub
+  ansible.builtin.file:
+    path: "${HOME}/.ssh/id_rsa.pub"
+    mode: 0644
+
+- name: chmod config
+  ansible.builtin.file:
+    path: "${HOME}/.ssh/config"
+    mode: 0600
+- name: chmod known_hosts
+  ansible.builtin.file:
+    path: "${HOME}/.ssh/known_hosts"
+    mode: 0600
+
