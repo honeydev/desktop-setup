@@ -13,15 +13,28 @@
     path: "${HOME}/.ssh/id_rsa"
     mode: 0600
 
+- name: Chmod id_rsa
+  ansible.builtin.file:
+    path: "${HOME}/.ssh/id_rsa2"
+    mode: 0600
+
+
 - name: chmod id_rsa.pub
   ansible.builtin.file:
     path: "${HOME}/.ssh/id_rsa.pub"
     mode: 0644
 
+- name: chmod id_rsa.pub
+  ansible.builtin.file:
+    path: "${HOME}/.ssh/id_rsa2.pub"
+    mode: 0644
+
+
 - name: chmod config
   ansible.builtin.file:
     path: "${HOME}/.ssh/config"
     mode: 0600
+
 - name: chmod known_hosts
   ansible.builtin.file:
     path: "${HOME}/.ssh/known_hosts"

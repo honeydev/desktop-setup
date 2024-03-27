@@ -1,6 +1,11 @@
-- name: Create a symbolic link
+- name: Create symlink on init.vim
   ansible.builtin.file:
     src: "{{ current_dir }}/roles/neovim/files/init.vim"
-
     dest: /home/honey/.config/nvim/init.vim
+    state: link
+
+- name: Create symlink on telescope.vim
+  ansible.builtin.file:
+    src: "{{ current_dir }}/roles/neovim/files/telescope.vim"
+    dest: /home/honey/.config/nvim/telescope.vim
     state: link
