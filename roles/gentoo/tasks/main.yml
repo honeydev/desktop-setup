@@ -1,0 +1,4 @@
+- name: install nvim sys deps
+  ansible.builtin.include_tasks:
+    file: nvim.yml
+

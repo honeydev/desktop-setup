@@ -1,30 +1,35 @@
-call plug#begin('~/.local/share/nvim/plugged') "Common debug plugs
+call plug#begin('~/.local/share/nvim/plugged')
+"Common debug plugs, DAP
+"https://github.com/mfussenegger/nvim-dap
 Plug 'mfussenegger/nvim-dap'
+Plug 'theHamsta/nvim-dap-virtual-text'
+"https://github.com/rcarriga/nvim-dap-ui
 Plug 'rcarriga/nvim-dap-ui'
 "Color scheme
+"https://github.com/shaunsingh/nord.nvim
 Plug 'arcticicestudio/nord-vim'
+"https://github.com/Rigellute/shades-of-purple.vim
 Plug 'Rigellute/shades-of-purple.vim'
+"https://github.com/catppuccin/nvim
+Plug 'catppuccin/nvim', { 'as': 'catppuccin' }
 "vim airline
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'nvim-tree/nvim-web-devicons'
 "scala plugins 
 Plug 'scalameta/nvim-metals'
-Plug 'theHamsta/nvim-dap-virtual-text'
-"Plug 'mfussenegger/nvim-dap' ruby plugins
+"Autocompletes
+"https://github.com/ms-jpq/coq_nvim
 Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
+"https://github.com/ray-x/lsp_signature.nvim
 Plug 'ray-x/lsp_signature.nvim'
-Plug 'vim-ruby/vim-ruby'
-Plug 'tpope/vim-rails'
-Plug 'slim-template/vim-slim'
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim'
 "search
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } } 
 Plug 'junegunn/fzf.vim'
-
-"Plug 'davidhalter/jedi-vim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
 Plug 'scrooloose/nerdtree'
+
 Plug 'jiangmiao/auto-pairs'
 Plug 'tpope/vim-surround'
 "Plug 'autozimu/LanguageClient-neovim', {
@@ -95,10 +100,10 @@ nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 
-"color scheme activate
-colorscheme shades_of_purple
+colorscheme catppuccin-frappe
+
 let g:shades_of_purple_airline = 1
-let g:airline_theme='shades_of_purple'
+let g:airline_theme='base16'
 let g:airline#extensions#tabline#enabled = 1
 "-----------------------------------------------------------------------------
 " nvim-lsp Mappings
@@ -127,83 +132,7 @@ nnoremap <silent> <leader>dsi <cmd>lua require("dap").step_info()<CR>
 nnoremap <silent> <leader>dl  <cmd>lua require("dap").run_last()<CR>
 nnoremap <silent> <leader>se  <cmd>lua vim.diagnostic.open_float()<CR>
 
-"-----------------------------------------------------------------------------
-" nvim-lsp Settings
-"-----------------------------------------------------------------------------
-" If you just use the latest stable version, then setting this isn't necessary
-" let g:metals_server_version = '0.11.9+176-8a27cb58-SNAPSHOT'
-
-"-----------------------------------------------------------------------------
-" nvim-metals setup with a few additions such as nvim-completions
-"-----------------------------------------------------------------------------
-:lua << EOF
-require("neoconf").setup({
-  -- override any of the default settings here
-})
-  metals_config = require'metals'.bare_config()
-  metals_config.settings = {
-     showImplicitArguments = true,
-     excludedPackages = {
-       "akka.actor.typed.javadsl",
-       "com.github.swagger.akka.javadsl"
-     }
-  }
-  vim.g.mapleader = '\\'
-  metals_config.on_attach = function()
-    require'completion'.on_attach();
-  end
-
-  local line_num = 5
-  local col_num = 5
-
-  metals_config.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-    vim.lsp.diagnostic.on_publish_diagnostics, {
-      virtual_text = {
-        spacing = 2,
-        prefix = " 🔥 ",
-        -- virt_text_pos = "overlay",
-        -- source = "always"
-      }
-    }
-  )
-
-  local dap = require("dap")
-  dap.configurations.scala = {
-  {
-    type = "scala",
-    request = "launch",
-    name = "RunMigrate",
-    metals = {
-      runType = "runOrTestFile",
-      args = { "migrate" }, -- here just as an example
-    },
-  },
-  {
-    type = "scala",
-    request = "launch",
-    name = "Test Target",
-    metals = {
-      runType = "testTarget",
-    },
-  },
-  {
-    type = "scala",
-    request = "launch",
-    name = "play",
-    buildTarget = "play-test-build",
-    metals = {
-      mainClass = "app.Server",
-      buildTarget = "play-test-build",
-      runType = "run",
-      args = {},
-      jvmOptions = {"-Dconfig.file=/path/to/production.conf"}
-    }
-  }
-}
-  metals_config.on_attach = function(client, bufnr)
-    require("metals").setup_dap()
-  end
-EOF
+:lua require('lsp')
 
 
 "-----------------------------------------------------------------------------
@@ -224,79 +153,7 @@ autocmd FileType scala setlocal omnifunc=v:lua.vim.lsp.omnifunc
 
 " Avoid showing message extra message when using completion
 set shortmess+=c
-lua << EOF
-local lsp = require "lspconfig"
-local coq = require "coq" -- add this
 
--- ray-x config https://github.com/ray-x/lsp_signature.nvim
-ray_conf = {
-  debug = false, -- set to true to enable debug logging
-  log_path = vim.fn.stdpath("cache") .. "/lsp_signature.log", -- log dir when debug is on
-  -- default is  ~/.cache/nvim/lsp_signature.log
-  verbose = false, -- show debug line number
-
-  bind = true, -- This is mandatory, otherwise border config won't get registered.
-               -- If you want to hook lspsaga or other signature handler, pls set to false
-  doc_lines = 10, -- will show two lines of comment/doc(if there are more than two lines in doc, will be truncated);
-                 -- set to 0 if you DO NOT want any API comments be shown
-                 -- This setting only take effect in insert mode, it does not affect signature help in normal
-                 -- mode, 10 by default
-
-  max_height = 12, -- max height of signature floating_window
-  max_width = 80, -- max_width of signature floating_window, line will be wrapped if exceed max_width
-                  -- the value need >= 40
-  wrap = true, -- allow doc/signature text wrap inside floating_window, useful if your lsp return doc/sig is too long
-  floating_window = true, -- show hint in a floating window, set to false for virtual text only mode
-
-  floating_window_above_cur_line = true, -- try to place the floating above the current line when possible Note:
-  -- will set to true when fully tested, set to false will use whichever side has more space
-  -- this setting will be helpful if you do not want the PUM and floating win overlap
-
-  floating_window_off_x = 1, -- adjust float windows x position.
-                             -- can be either a number or function
-  floating_window_off_y = 0, -- adjust float windows y position. e.g -2 move window up 2 lines; 2 move down 2 lines
-                              -- can be either number or function, see examples
-
-  close_timeout = 4000, -- close floating window after ms when laster parameter is entered
-  fix_pos = false,  -- set to true, the floating window will not auto-close until finish all parameters
-  hint_enable = true, -- virtual hint enable
-  hint_prefix = "🐼 ",  -- Panda for parameter, NOTE: for the terminal not support emoji, might crash
-  hint_scheme = "String",
-  hint_inline = function() return false end,  -- should the hint be inline(nvim 0.10 only)?  default false
-  -- return true | 'inline' to show hint inline, return 'eol' to show hint at end of line, return false to disable
-  -- return 'right_align' to display hint right aligned in the current line
-  hi_parameter = "LspSignatureActiveParameter", -- how your parameter will be highlight
-  handler_opts = {
-    border = "rounded"   -- double, rounded, single, shadow, none, or a table of borders
-  },
-
-  always_trigger = false, -- sometime show signature on new line or in middle of parameter can be confusing, set it to false for #58
-
-  auto_close_after = nil, -- autoclose signature float win after x sec, disabled if nil.
-  extra_trigger_chars = {}, -- Array of extra characters that will trigger signature completion, e.g., {"(", ","}
-  zindex = 200, -- by default it will be on top of all floating windows, set to <= 50 send it to bottom
-
-  padding = '', -- character to pad on left and right of signature can be ' ', or '|'  etc
-
-  transparency = nil, -- disabled by default, allow floating win transparent value 1~100
-  shadow_blend = 36, -- if you using shadow as border use this set the opacity
-  shadow_guibg = 'Black', -- if you using shadow as border use this set the color e.g. 'Green' or '#121315'
-  timer_interval = 200, -- default timer check interval set to lower value if you want to reduce latency
-  toggle_key = nil, -- toggle signature on and off in insert mode,  e.g. toggle_key = '<M-x>'
-  toggle_key_flip_floatwin_setting = false, -- true: toggle floating_windows: true|false setting after toggle key pressed
-     -- false: floating_windows setup will not change, toggle_key will pop up signature helper, but signature
-     -- may not popup when typing depends on floating_window setting
-
-  select_signature_key = nil, -- cycle to next signature, e.g. '<M-n>' function overloading
-  move_cursor_key = nil, -- imap, use nvim_set_current_win to move cursor between current win and floating
-}
-
-
--- lsp.pylsp.setup{}
--- lsp.pylsp.setup(coq.lsp_ensure_capabilities())
-require("dapui").setup()
-require'lsp_signature'.setup(rayx_conf)
-EOF
 
 set completeopt-=preview
 

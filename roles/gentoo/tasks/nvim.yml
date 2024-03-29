@@ -1,0 +1,7 @@
+
+- name: Install package
+  community.general.portage:
+    package: sys-apps/ripgrep
+    state: present
+  become: true
+

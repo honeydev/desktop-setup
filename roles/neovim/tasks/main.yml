@@ -1,11 +1,18 @@
 - name: Create symlink on init.vim
   ansible.builtin.file:
     src: "{{ current_dir }}/roles/neovim/files/init.vim"
-    dest: /home/honey/.config/nvim/init.vim
+    dest: "${HOME}/.config/nvim/init.vim"
     state: link
 
 - name: Create symlink on telescope.vim
   ansible.builtin.file:
     src: "{{ current_dir }}/roles/neovim/files/telescope.vim"
-    dest: /home/honey/.config/nvim/telescope.vim
+    dest: "${HOME}/.config/nvim/telescope.vim"
     state: link
+
+- name: Create symlink on lua configs
+  ansible.builtin.file:
+    src: "{{ current_dir }}/roles/neovim/files/lua"
+    dest: "${HOME}/.config/nvim/lua"
+    state: link
+
