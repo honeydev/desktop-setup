@@ -1,0 +1,7 @@
+- name: "copy 00-keyboard.conf"
+  ansible.builtin.copy:
+    src: "00-keyboard.conf"
+    dest: /etc/X11/xorg.conf.d/00-keyboard.conf
+  become: yes
+
+
