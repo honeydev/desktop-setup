@@ -1,0 +1,15 @@
+- name: Install X.org binary packages
+  community.general.portage:
+    package: "{{ item }}"
+    state: present
+    usepkg: true
+    verbose: true
+  become: true
+  loop:
+    - x11-apps/xrandr
+     # gui for xrandr
+    - x11-misc/arandr
+      # cli wallpaper manager
+    - media-gfx/feh
+
+

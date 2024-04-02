@@ -1,12 +1,13 @@
 - name: SETUP DESKTOP ENVIROMENT
   hosts: all
   roles:
+    - role: gentoo
+      tags: gentoo
     - role: ssh
       tags: ssh
     - role: neovim
       tags: nvim
-    - role: gentoo
-      tags: gentoo
     - role: X
       tags: X
+
 

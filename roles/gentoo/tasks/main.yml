@@ -1,4 +1,10 @@
 - name: install nvim sys deps
   ansible.builtin.include_tasks:
     file: nvim.yml
+  tags: ["nvim"]
+
+- name: install X.org deps
+  ansible.builtin.include_tasks:
+    file: X.yml
+  tags: ["X"]
 

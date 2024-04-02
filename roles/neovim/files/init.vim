@@ -158,7 +158,7 @@ set shortmess+=c
 set completeopt-=preview
 
 :lua << EOF
-require("telescope").setup{  defaults = { file_ignore_patterns = { "node_modules", "venv"}} }
+require("telescope").setup{  defaults = { file_ignore_patterns = { "node_modules", "venv" }} }
 EOF
 
 if has('nvim-0.5')
