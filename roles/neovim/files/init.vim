@@ -1,3 +1,5 @@
+language en_US
+
 call plug#begin('~/.local/share/nvim/plugged')
 "Common debug plugs, DAP
 "https://github.com/mfussenegger/nvim-dap

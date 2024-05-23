@@ -8,5 +8,5 @@ setup-ssh:
 	ansible-playbook playbook.yml -i  hosts.yml --extra-vars secrets_path=${current_dir}/secrets --tags="ssh"
 
 setup-nvim:
-	ansible-playbook playbook.yml -i  hosts.yml --tags="nvim"
+	ansible-playbook playbook.yml -i  hosts.yml --extra-vars current_dir=${current_dir} --tags="nvim"
 
