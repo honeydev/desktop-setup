@@ -1,4 +1,3 @@
-language en_US
 
 call plug#begin('~/.local/share/nvim/plugged')
 "Common debug plugs, DAP
@@ -6,6 +5,7 @@ call plug#begin('~/.local/share/nvim/plugged')
 Plug 'mfussenegger/nvim-dap'
 Plug 'theHamsta/nvim-dap-virtual-text'
 "https://github.com/rcarriga/nvim-dap-ui
+Plug 'nvim-neotest/nvim-nio'
 Plug 'rcarriga/nvim-dap-ui'
 "Color scheme
 "https://github.com/shaunsingh/nord.nvim
@@ -45,6 +45,12 @@ Plug 'puremourning/vimspector'
 "Conf for use local project config
 Plug 'folke/neoconf.nvim'
 
+"git plugins
+Plug 'f-person/git-blame.nvim'
+
+Plug 'williamboman/mason.nvim'
+Plug 'startup-nvim/startup.nvim'
+
 call plug#end()
 
 "viminspector conf
@@ -66,10 +72,10 @@ set softtabstop=4   " Sets the number of columns for a TAB
 
 set expandtab       " Expand TABs to spaces
 
-autocmd VimEnter * NERDTree
-let g:LanguageClient_serverCommands = {
-    \ 'ruby': ['~/.asdf/shims/solargraph', 'stdio'],
-    \ }
+"autocmd VimEnter * NERDTree
+"let g:LanguageClient_serverCommands = {
+"    \ 'ruby': ['~/.asdf/shims/solargraph', 'stdio'],
+"    \ }
 
 autocmd FileType ruby setlocal expandtab shiftwidth=2 tabstop=2
 autocmd FileType eruby setlocal expandtab shiftwidth=2 tabstop=2
@@ -78,13 +84,13 @@ autocmd FileType eruby setlocal expandtab shiftwidth=2 tabstop=2
 nmap ~ :NERDTreeToggle<CR> “ open/close nerdtree window
 nmap <leader>r :NERDTreeFind<cr> “ this is the key to jump to the nerdtree window from any other window
 nmap ] :NERDTreeFind<CR> “ pressing this inside any open file in vim will jump to the nerdtree and highlight where that file is -> very useful when you have multiple files open at once
-autocmd BufWinEnter * NERDTreeFind
+"autocmd BufWinEnter * NERDTreeFind
 
-nmap <F5> <Plug>(lcn-menu)
+"nmap <F5> <Plug>(lcn-menu)
 " Or map each action separately
-nmap <silent>K <Plug>(lcn-hover)
-nmap <silent> gd <Plug>(lcn-definition)
-nmap <silent> <F2> <Plug>(lcn-rename)
+"nmap <silent>K <Plug>(lcn-hover)
+"nmap <silent> gd <Plug>(lcn-definition)
+"nmap <silent> <F2> <Plug>(lcn-rename)
 
 let g:elm_jump_to_error = 0
 let g:elm_make_output_file = "elm.js"
@@ -107,6 +113,9 @@ colorscheme catppuccin-frappe
 let g:shades_of_purple_airline = 1
 let g:airline_theme='base16'
 let g:airline#extensions#tabline#enabled = 1
+
+
+
 "-----------------------------------------------------------------------------
 " nvim-lsp Mappings
 "-----------------------------------------------------------------------------
@@ -119,7 +128,7 @@ nnoremap <silent> gws         <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
 nnoremap <silent> <leader>rn  <cmd>lua vim.lsp.buf.rename()<CR>
 nnoremap <silent> <leader>f   <cmd>lua vim.lsp.buf.formatting()<CR>
 nnoremap <silent> <leader>ca  <cmd>lua vim.lsp.buf.code_action()<CR>
-nnoremap <silent> <leader>ws  <cmd>lua require'metals'.worksheet_hover()<CR>
+nnoremap <silent> <leader>ws  <cmd>lua require'metals'.hover_worksheet()<CR>
 nnoremap <silent> <leader>a   <cmd>lua require'metals'.open_all_diagnostics()<CR>
 nnoremap <silent> <space>d    <cmd>lua vim.lsp.diagnostic.set_loclist()<CR>
 nnoremap <silent> [c          <cmd>lua vim.lsp.diagnostic.goto_prev { wrap = false }<CR>
@@ -136,6 +145,8 @@ nnoremap <silent> <leader>se  <cmd>lua vim.diagnostic.open_float()<CR>
 
 :lua require('lsp')
 
+
+"-----------------------------------------------------------------------------
 
 "-----------------------------------------------------------------------------
 " completion-nvim settings
@@ -161,6 +172,7 @@ set completeopt-=preview
 
 :lua << EOF
 require("telescope").setup{  defaults = { file_ignore_patterns = { "node_modules", "venv" }} }
+require"startup".setup(require"ui_ux")
 EOF
 
 if has('nvim-0.5')
@@ -169,4 +181,5 @@ if has('nvim-0.5')
     au FileType scala,sbt lua require('metals').initialize_or_attach(metals_config)
   augroup end
 endif
+
 
