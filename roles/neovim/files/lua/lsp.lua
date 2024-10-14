@@ -1,6 +1,7 @@
 require("neoconf").setup({
   -- override any of the default settings here
-}) metals_config = require'metals'.bare_config()
+}) 
+metals_config = require'metals'.bare_config()
   metals_config.settings = {
      showImplicitArguments = true,
      excludedPackages = {
@@ -22,46 +23,11 @@ require("neoconf").setup({
       virtual_text = {
         spacing = 2,
         prefix = " 🔥 ",
-        -- virt_text_pos = "overlay",
-        -- source = "always"
-      }
-    }
+        virt_text_pos = "overlay",
+        source = "always" } }
   )
 
-  local dap = require("dap")
-  dap.configurations.scala = {
-  {
-    type = "scala",
-    request = "launch",
-    name = "DIStage :web",
-    metals = {
-      runType = "runOrTestFile",
-      mainClass = "sparkshow.SparkshowLauncher",
-      args = { ":web" }, -- here just as an example
-    },
-  },
-  {
-    type = "scala",
-    request = "launch",
-  metals = {
-      runType = "testTarget",
-    },
-  },
-  {
-    type = "scala",
-    request = "launch",
-    name = "play",
-    buildTarget = "play-test-build",
-    metals = {
-      mainClass = "app.Server",
-      buildTarget = "play-test-build",
-      runType = "run",
-      args = {},
-      jvmOptions = {"-Dconfig.file=/path/to/production.conf"}
-    }
-  }
-}
-
+  
 metals_config.on_attach = function(client, bufnr)
   require("metals").setup_dap()
 end
@@ -107,7 +73,7 @@ local dap, dapui = require("dap"), require("dapui")
           {
             elements = {
               'repl',
-              --    'console',
+              'console',
             },
             size = 10,
             position = 'bottom',
@@ -167,5 +133,5 @@ vim.keymap.set("n", "<leader>dut",
 function () 
     require("dapui").toggle()       -- vim.keymap.set("n", "<leader>duc", require("dapui").close())
 end)                               -- vim.keymap.set("n", "<leader>dut", require("dapui").toggle())
--- 
-
+--
+require("nvim-dap-projects").search_project_config()

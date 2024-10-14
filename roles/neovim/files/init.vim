@@ -3,6 +3,7 @@ call plug#begin('~/.local/share/nvim/plugged')
 "Common debug plugs, DAP
 "https://github.com/mfussenegger/nvim-dap
 Plug 'mfussenegger/nvim-dap'
+Plug 'ldelossa/nvim-dap-projects'
 Plug 'theHamsta/nvim-dap-virtual-text'
 "https://github.com/rcarriga/nvim-dap-ui
 Plug 'nvim-neotest/nvim-nio'
@@ -20,6 +21,8 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'nvim-tree/nvim-web-devicons'
 "scala plugins 
 Plug 'scalameta/nvim-metals'
+Plug 'mrcjkb/rustaceanvim', '4.26.1'
+
 "Autocompletes
 "https://github.com/ms-jpq/coq_nvim
 Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
@@ -46,10 +49,11 @@ Plug 'puremourning/vimspector'
 Plug 'folke/neoconf.nvim'
 
 "git plugins
-Plug 'f-person/git-blame.nvim'
 
+Plug 'f-person/git-blame.nvim'
 Plug 'williamboman/mason.nvim'
 Plug 'startup-nvim/startup.nvim'
+Plug 'nvim-treesitter/nvim-treesitter'
 
 call plug#end()
 
@@ -174,6 +178,7 @@ set completeopt-=preview
 require("telescope").setup{  defaults = { file_ignore_patterns = { "node_modules", "venv" }} }
 require"startup".setup(require"ui_ux")
 EOF
+
 
 if has('nvim-0.5')
   augroup lsp
