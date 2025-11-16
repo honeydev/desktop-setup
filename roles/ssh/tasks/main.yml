@@ -40,3 +40,14 @@
     path: "${HOME}/.ssh/known_hosts"
     mode: 0600
 
+- name: Chmod id_rsa_kvantera_gitlab
+  ansible.builtin.file:
+    path: "${HOME}/.ssh/id_rsa_kvantera_gitlab"
+    mode: 0600
+
+- name: chmod id_rsa_kvantera_gitlab_pub
+  ansible.builtin.file:
+    path: "${HOME}/.ssh/id_rsa_kvantera_gitlab.pub"
+    mode: 0644
+
+

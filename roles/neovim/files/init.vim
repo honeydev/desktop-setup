@@ -21,7 +21,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'nvim-tree/nvim-web-devicons'
 "scala plugins 
 Plug 'scalameta/nvim-metals'
-Plug 'mrcjkb/rustaceanvim', '4.26.1'
+"Plug 'mrcjkb/rustaceanvim', '4.26.1'
 
 "Autocompletes
 "https://github.com/ms-jpq/coq_nvim
@@ -42,7 +42,9 @@ Plug 'tpope/vim-surround'
 "    \ 'do': 'bash install.sh',
 "    \ }
 Plug 'junegunn/fzf'
-Plug 'elmcast/elm-vim'
+"Plug 'elmcast/elm-vim'
+Plug 'elm-tooling/elm-vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neovim/nvim-lspconfig'
 Plug 'puremourning/vimspector'
 "Conf for use local project config
@@ -51,7 +53,7 @@ Plug 'folke/neoconf.nvim'
 "git plugins
 
 Plug 'f-person/git-blame.nvim'
-Plug 'williamboman/mason.nvim'
+Plug 'williamboman/mason.nvim', { 'tag': 'v1.11.0' }
 Plug 'startup-nvim/startup.nvim'
 Plug 'nvim-treesitter/nvim-treesitter'
 
@@ -84,7 +86,8 @@ set expandtab       " Expand TABs to spaces
 autocmd FileType ruby setlocal expandtab shiftwidth=2 tabstop=2
 autocmd FileType eruby setlocal expandtab shiftwidth=2 tabstop=2
 
-
+let g:NERDTreeMinimalMenu=1
+let NERDTreeWinSize=26
 nmap ~ :NERDTreeToggle<CR> “ open/close nerdtree window
 nmap <leader>r :NERDTreeFind<cr> “ this is the key to jump to the nerdtree window from any other window
 nmap ] :NERDTreeFind<CR> “ pressing this inside any open file in vim will jump to the nerdtree and highlight where that file is -> very useful when you have multiple files open at once
@@ -123,18 +126,18 @@ let g:airline#extensions#tabline#enabled = 1
 "-----------------------------------------------------------------------------
 " nvim-lsp Mappings
 "-----------------------------------------------------------------------------
-nnoremap <silent> gd          <cmd>lua vim.lsp.buf.definition()<CR>
-nnoremap <silent> K           <cmd>lua vim.lsp.buf.hover()<CR>
-nnoremap <silent> gi          <cmd>lua vim.lsp.buf.implementation()<CR>
-nnoremap <silent> gr          <cmd>lua vim.lsp.buf.references()<CR>
-nnoremap <silent> gds         <cmd>lua vim.lsp.buf.document_symbol()<CR>
-nnoremap <silent> gws         <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
-nnoremap <silent> <leader>rn  <cmd>lua vim.lsp.buf.rename()<CR>
-nnoremap <silent> <leader>f   <cmd>lua vim.lsp.buf.formatting()<CR>
-nnoremap <silent> <leader>ca  <cmd>lua vim.lsp.buf.code_action()<CR>
-nnoremap <silent> <leader>ws  <cmd>lua require'metals'.hover_worksheet()<CR>
-nnoremap <silent> <leader>a   <cmd>lua require'metals'.open_all_diagnostics()<CR>
-nnoremap <silent> <space>d    <cmd>lua vim.lsp.diagnostic.set_loclist()<CR>
+nnoremap <silent> mgd          <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> mK           <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> mgi          <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> mgr          <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent> mgds         <cmd>lua vim.lsp.buf.document_symbol()<CR>
+nnoremap <silent> mgws         <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
+nnoremap <silent> <leader>mrn  <cmd>lua vim.lsp.buf.rename()<CR>
+nnoremap <silent> <leader>mf   <cmd>lua vim.lsp.buf.formatting()<CR>
+nnoremap <silent> <leader>mca  <cmd>lua vim.lsp.buf.code_action()<CR>
+nnoremap <silent> <leader>mws  <cmd>lua require'metals'.hover_worksheet()<CR>
+nnoremap <silent> <leader>ma   <cmd>lua require'metals'.open_all_diagnostics()<CR>
+nnoremap <silent> <space>md    <cmd>lua vim.lsp.diagnostic.set_loclist()<CR>
 nnoremap <silent> [c          <cmd>lua vim.lsp.diagnostic.goto_prev { wrap = false }<CR>
 nnoremap <silent> ]c          <cmd>lua vim.lsp.diagnostic.goto_next { wrap = false }<CR>
 nnoremap <silent> <leader>rd  <cmd>lua vim.lsp.codelens.run()<CR>
@@ -146,6 +149,18 @@ nnoremap <silent> <leader>dso <cmd>lua require("dap").step_over()<CR>
 nnoremap <silent> <leader>dsi <cmd>lua require("dap").step_info()<CR>
 nnoremap <silent> <leader>dl  <cmd>lua require("dap").run_last()<CR>
 nnoremap <silent> <leader>se  <cmd>lua vim.diagnostic.open_float()<CR>
+
+" Keybindings
+nmap <silent> <leader>rn <Plug>(coc-rename)
+nmap <silent> <leader>fc <Plug>(coc-fix-current)
+nmap <silent> <leader>S <Plug>(coc-codeaction)
+nmap <silent> <leader>ca <cmd>lua vim.lsp.buf.code_action()<CR>
+nmap <silent> <leader>a <Plug>(coc-diagnostic-next)
+nmap <silent> <leader>A <Plug>(coc-diagnostic-next-error)
+nmap <silent> <leader>gd <Plug>(coc-definition)
+nmap <silent> <leader>K :call CocAction('doHover')<CR>
+nmap <silent> <leader>gr <Plug>(coc-references)
+nmap <silent> <leader>p :call CocActionAsync('format')<CR>
 
 :lua require('lsp')
 
